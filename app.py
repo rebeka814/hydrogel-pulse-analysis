@@ -27,7 +27,7 @@ if uploaded_file is not None:
         st.image(frame_rgb, caption="Preview of the calculating zon (Red zone)")
         intensity, fps = extract_signal(temp_video_path, x, y, w, h)
         time_axis = get_time_axis(intensity, fps)
-        freq, period, peaks = analyze_frequency(intensity, fps)
+        peaks, period, freq, smoothed_intensity = analyze_frequency(intensity, fps)
         col1, col2  = st.columns(2)
         col1.metric("Frequency (Hz)", f"{freq:.2f}")
         col2.metric("Period (s)", f"{period:.2f}")
