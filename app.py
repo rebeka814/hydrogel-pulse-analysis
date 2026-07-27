@@ -32,7 +32,7 @@ if uploaded_file is not None:
         col1.metric("Frequency (Hz)", f"{freq:.5f}") #display metric
         col2.metric("Period (s)", f"{period:.5f}")
         fig = go.Figure() #initialize a figure
-        fig.add_trace(go.Scatter(x=time_axis, y=intensity, mode="lines", name="Intensity", line=dict(color="blue", dash="dash")))
+        fig.add_trace(go.Scatter(x=time_axis, y=intensity, mode="lines", name="Intensity", line=dict(color="blue", dash="dot")))
         if len(peaks) > 0:
             fig.add_trace(go.Scatter(x=time_axis[peaks], y=intensity[peaks], mode="markers", name="Detected peaks", marker=dict(color="red", size=8)))
         fig.update_layout(title="Hydrogel pulse signal",xaxis_title="Time (s)", yaxis_title="Mean intensity", hovermode="x unified")
