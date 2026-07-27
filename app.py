@@ -35,7 +35,7 @@ if uploaded_file is not None:
         fig.add_trace(go.Scatter(x=time_axis, y=intensity, mode="lines", name="Initial signal", line=dict(color="gray", dash="dot")))
         fig.add_trace(go.Scatter(x=time_axis, y=smoothed_intensity, mode="lines", name="Smoothed signal", line=dict(color="blue")))
         if len(peaks) > 0:
-            fig.add_trace(go.Scatter(x=time_axis[peaks], y=smoothed_intensity[peaks], mode="markers", name="Detected peaks", marker=dict(color="red", size=5, symbol="cross")))
+            fig.add_trace(go.Scatter(x=time_axis[peaks], y=smoothed_intensity[peaks], mode="markers", name="Detected peaks", marker=dict(color="red", size=7, symbol="cross")))
         fig.update_layout(title="Hydrogel pulse signal",xaxis_title="Time (s)", yaxis_title="Mean intensity", hovermode="x unified")
         st.plotly_chart(fig, use_container_width=True) #displays the plot
 
