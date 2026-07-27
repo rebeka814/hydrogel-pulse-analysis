@@ -9,7 +9,7 @@ def get_time_axis(intensity, fps):
 
 def analyze_frequency(intensity, fps, distance=1/6, prominence=None):
     smoothed_intensity = savgol_filter(intensity, 11, 3) #smoothing the curve
-    smoothed_intensity = (smoothed_intensity-np.min(smoothed_intensity))/(np.max(smoothed_intensity)-np.min(smoothed_intensity)) #normalizing the curve
+    #smoothed_intensity = (smoothed_intensity-np.min(smoothed_intensity))/(np.max(smoothed_intensity)-np.min(smoothed_intensity)) #normalizing the curve
     peaks, _ = find_peaks(smoothed_intensity, distance=int(fps*distance), prominence=prominence) 
     if len(peaks) < 2: 
         return peaks, 0.0, 0.0, smoothed_intensity    # impossible to calculate period with less than 2 peaks
