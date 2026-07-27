@@ -23,7 +23,7 @@ if uploaded_file is not None:
     cap.release() #close the video
     if ret:
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (255, 0, 0), 2) 
+        cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (0, 255, 0), 2) 
         st.image(frame_rgb, caption="Preview of the calculating zone (red zone)") #dispay the image 'frame'
         intensity, fps = extract_signal(temp_video_path, x, y, w, h)
         time_axis = get_time_axis(intensity, fps)
