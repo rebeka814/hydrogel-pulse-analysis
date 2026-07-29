@@ -22,12 +22,14 @@ if uploaded_file is not None:
         tfile.write(uploaded_file.read()) #store the uploaded video in tfile
         temp_video_path = tfile.name
     cap = cv2.VideoCapture(temp_video_path) #open the video file
+    video_width, video_height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    video_shape = (video_width, video_height)
     ret, frame = cap.read() #read the first frame and store it in 'frame'
     cap.release() #close the video
     if ret:
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (0, 255, 0), 2) 
-        st.image(frame_rgb, caption="Preview of the calculating zone (green zone)") #dispay the image 'frame'
+        st.image(frame_rgb, caption=f"Preview of the calculating zone (green zone). \n Picture size: {video_shape}") #dispay the image 'frame'
 
         intensity, fps = extract_signal(temp_video_path, x, y, w, h)
         time_axis = get_time_axis(intensity, fps)
