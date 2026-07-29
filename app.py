@@ -25,7 +25,7 @@ if uploaded_file is not None:
     video_width, video_height = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     video_shape = (video_width, video_height)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    frame_idx = st.sidebar.slider("Preview frame index", 0, total_frames - 1, 0)
+    frame_idx = st.slider("Preview frame index", 0, total_frames - 1, 0)
     cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
     ret, frame = cap.read() #read the first frame and store it in 'frame'
     cap.release() #close the video
