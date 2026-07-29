@@ -14,7 +14,7 @@ w = st.sidebar.number_input("width", value=20)
 h = st.sidebar.number_input("height", value=20) 
 
 distance_val = st.sidebar.slider("Peak distance (s)", min_value=0.01, max_value=2.00, value=0.17, step=0.01)
-prominence_val = st.sidebar.slider("Peak prominence", min_value=0.0, max_value=50.0, value=0.0, step=0.5)
+prominence_val = st.sidebar.slider("Peak prominence", min_value=0.0, max_value=10.0, value=0.0, step=0.1)
 
 uploaded_file = st.sidebar.file_uploader("Hydrogel video", type=["avi", "mp4"])
 if uploaded_file is not None:
