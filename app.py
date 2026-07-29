@@ -13,6 +13,9 @@ y = st.sidebar.number_input("y", value=260)
 w = st.sidebar.number_input("width", value=20)
 h = st.sidebar.number_input("height", value=20) 
 
+distance_val = st.sidebar.slider("Peak distance (s)", min_value=0.01, max_value=2.00, value=0.17, step=0.01)
+prominence_val = st.sidebar.slider("Peak prominence", min_value=0.0, max_value=50.0, value=0.0, step=0.5)
+
 uploaded_file = st.sidebar.file_uploader("Hydrogel video", type=["avi", "mp4"])
 if uploaded_file is not None:
     with tempfile.NamedTemporaryFile(delete=False, suffix='.avi') as tfile: #create a temporary file named tfile
@@ -24,10 +27,11 @@ if uploaded_file is not None:
     if ret:
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (0, 255, 0), 2) 
-        st.image(frame_rgb, caption="Preview of the calculating zone (red zone)") #dispay the image 'frame'
+        st.image(frame_rgb, caption="Preview of the calculating zone (green zone)") #dispay the image 'frame'
         intensity, fps = extract_signal(temp_video_path, x, y, w, h)
         time_axis = get_time_axis(intensity, fps)
-        peaks, period, freq, smoothed_intensity = analyze_frequency(intensity, fps)
+        prom_param = prominence_val if prominence_val > 0 else None #avoiding bugs with prominence
+        peaks, period, freq, smoothed_intensity = analyze_frequency(intensity, fps, distance=distance_val, prominence=prom_param)
         col1, col2  = st.columns(2)
         col1.metric("Frequency (Hz)", f"{freq:.5f}") #display metric
         col2.metric("Period (s)", f"{period:.5f}")
