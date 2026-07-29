@@ -44,7 +44,7 @@ if uploaded_file is not None:
         col1.metric("Frequency (Hz)", f"{freq:.5f}") #display metric
         col2.metric("Period (s)", f"{period:.5f}")
         fig = go.Figure() #initialize a figure
-        fig.add_trace(go.Scatter(x=time_axis_filtered, y=intensity_filtered, mode="lines", name="Initial signal", line=dict(color="#D3D3D3", dash="dot")))
+        fig.add_trace(go.Scatter(x=time_axis_filtered, y=intensity_filtered, mode="lines", name="Initial signal", line=dict(color="#D3D3D3")))
         fig.add_trace(go.Scatter(x=time_axis_filtered, y=smoothed_intensity, mode="lines", name="Smoothed signal", line=dict(color="blue")))
         if len(peaks) > 0:
             fig.add_trace(go.Scatter(x=time_axis_filtered[peaks], y=smoothed_intensity[peaks], mode="markers", name="Detected peaks", marker=dict(color="red", size=7, symbol="cross")))
