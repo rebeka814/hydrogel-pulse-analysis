@@ -28,18 +28,26 @@ if uploaded_file is not None:
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (0, 255, 0), 2) 
         st.image(frame_rgb, caption="Preview of the calculating zone (green zone)") #dispay the image 'frame'
+
         intensity, fps = extract_signal(temp_video_path, x, y, w, h)
         time_axis = get_time_axis(intensity, fps)
+        t_min_val = float(time_axis[0])
+        t_max_val = float(time_axis[-1])
+        selected_range = st.sidebar.slider("Time window to keep (s)", min_value=t_min_val, max_value=t_max_val, value=(t_min_val, t_max_val), step=0.1)
+        mask = (time_axis >= selected_range[0]) & (time_axis <= selected_range[1])
+        time_axis_filtered = time_axis[mask]
+        intensity_filtered = intensity[mask]
         prom_param = prominence_val if prominence_val > 0 else None #avoiding bugs with prominence
-        peaks, period, freq, smoothed_intensity = analyze_frequency(intensity, fps, distance=distance_val, prominence=prom_param)
+        peaks, period, freq, smoothed_intensity = analyze_frequency(intensity_filtered, fps, distance=distance_val, prominence=prom_param)
+
         col1, col2  = st.columns(2)
         col1.metric("Frequency (Hz)", f"{freq:.5f}") #display metric
         col2.metric("Period (s)", f"{period:.5f}")
         fig = go.Figure() #initialize a figure
-        fig.add_trace(go.Scatter(x=time_axis, y=intensity, mode="lines", name="Initial signal", line=dict(color="gray", dash="dot")))
-        fig.add_trace(go.Scatter(x=time_axis, y=smoothed_intensity, mode="lines", name="Smoothed signal", line=dict(color="blue")))
+        fig.add_trace(go.Scatter(x=time_axis_filtered, y=intensity_filtered, mode="lines", name="Initial signal", line=dict(color="gray", dash="dot")))
+        fig.add_trace(go.Scatter(x=time_axis_filtered, y=smoothed_intensity[mask], mode="lines", name="Smoothed signal", line=dict(color="blue")))
         if len(peaks) > 0:
-            fig.add_trace(go.Scatter(x=time_axis[peaks], y=smoothed_intensity[peaks], mode="markers", name="Detected peaks", marker=dict(color="red", size=7, symbol="cross")))
+            fig.add_trace(go.Scatter(x=time_axis_filtered[peaks], y=smoothed_intensity[mask][peaks], mode="markers", name="Detected peaks", marker=dict(color="red", size=7, symbol="cross")))
         fig.update_layout(title="Hydrogel pulse signal",xaxis_title="Time (s)", yaxis_title="Mean intensity", hovermode="x unified")
         st.plotly_chart(fig, use_container_width=True) #displays the plot
 
