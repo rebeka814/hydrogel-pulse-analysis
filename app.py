@@ -3,15 +3,22 @@ import tempfile
 import cv2
 import plotly.graph_objects as go
 from src.processing import extract_signal 
-from src.signal_analysis import get_time_axis, analyze_frequency 
+from src.signal_analysis import get_time_axis, analyze_frequency, calculate_wave_properties
 
 st.title("Hydrogel pulse analysis")
 st.markdown("In this app you can analyse the pulse of an hydrogel by video.")
 
+pixel_size = st.sidebar.number_input("Pixel size (micrometer)", value=0.05, format="%.4f")
+
+st.sidebar.markdown("Zone 1: pulse measure (green)")
 x = st.sidebar.number_input("x", value=530)
 y = st.sidebar.number_input("y", value=260)
 w = st.sidebar.number_input("width", value=20)
-h = st.sidebar.number_input("height", value=20) 
+h = st.sidebar.number_input("height", value=20)
+
+st.sidebar.markdown("Zone 2: speed measure (blue)")
+x2 = st.sidebar.number_input("x\'", value=x + 100)
+y2 = st.sidebar.number_input("y\'", value=y)
 
 distance_val = st.sidebar.slider("Peak distance (s)", min_value=0.01, max_value=2.00, value=0.17, step=0.01)
 prominence_val = st.sidebar.slider("Peak prominence", min_value=0.0, max_value=5.0, value=0.0, step=0.05)
@@ -55,6 +62,17 @@ if uploaded_file is not None:
             fig.add_trace(go.Scatter(x=time_axis_filtered[peaks], y=smoothed_intensity[peaks], mode="markers", name="Detected peaks", marker=dict(color="red", size=7, symbol="cross")))
         fig.update_layout(title="Hydrogel pulse signal",xaxis_title="Time (s)", yaxis_title="Mean intensity", hovermode="x unified")
         st.plotly_chart(fig, use_container_width=True) #displays the plot
+
+        intensity2, _ = extract_signal(temp_video_path, x2, y1, w, h)
+        intensity2_filtered = intensity2[mask]
+        peaks2, _, _, smoothed2 = analyze_frequency(intensity2_filtered, fps, distance=distance_val, prominence=prom_param)
+        distance_px = np.sqrt((x2 - x)**2 + (y2 - y)**2)
+        speed, wavelength, distance_um = calculate_wave_properties(peaks, peaks2, fps, distance_px, pixel_size_um, period)
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Frequency", f"{freq:.3f} Hz")
+        col2.metric("Period", f"{period:.3f} s")
+        col3.metric("Speed", f"{speed:.2f} um/s")
+        col4.metric("Wavelength", f"{wavelength:.2f} um")
 
 st.success("Success")
 

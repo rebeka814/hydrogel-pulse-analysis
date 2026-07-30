@@ -8,7 +8,7 @@ def get_time_axis(intensity, fps):
     return time_axis
 
 def analyze_frequency(intensity, fps, distance=1/6, prominence=None):
-    intensity = np.nan_to_num(intensity, nan=0.0, posinf=0.0, neginf=0.0)
+    #intensity = np.nan_to_num(intensity, nan=0.0, posinf=0.0, neginf=0.0)
     if len(intensity) < 11:
         return [], 0.0, 0.0, intensity
     smoothed_intensity = savgol_filter(intensity, 11, 3) #smoothing the curve
@@ -20,3 +20,17 @@ def analyze_frequency(intensity, fps, distance=1/6, prominence=None):
     T = np.mean(period)/fps
     f = 1/T
     return peaks, T, f, smoothed_intensity
+
+def calculate_wave_properties(peaks1, peaks2, fps, distance_px, pixel_size, period):
+    if len(peaks1) == 0 or len(peaks2) == 0:
+        return 0.0, 0.0, 0.0
+    distance_um = distance_px * pixel_size
+    min_len = min(len(peaks1), len(peaks2))
+    time_peaks1 = peaks1[:min_len] / fps
+    time_peaks2 = peaks2[:min_len] / fps
+    dt = np.mean(np.abs(time_peaks2 - time_peaks1))
+    if dt == 0:
+        return 0.0, 0.0, distance_um
+    speed = distance_um / dt
+    wavelength = speed * period
+    return speed, wavelength, distance_um
