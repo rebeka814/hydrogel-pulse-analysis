@@ -63,7 +63,7 @@ if uploaded_file is not None:
         fig.update_layout(title="Hydrogel pulse signal",xaxis_title="Time (s)", yaxis_title="Mean intensity", hovermode="x unified")
         st.plotly_chart(fig, use_container_width=True) #displays the plot
 
-        intensity2, _ = extract_signal(temp_video_path, x2, y1, w, h)
+        intensity2, _ = extract_signal(temp_video_path, x2, y2, w, h)
         intensity2_filtered = intensity2[mask]
         peaks2, _, _, smoothed2 = analyze_frequency(intensity2_filtered, fps, distance=distance_val, prominence=prom_param)
         distance_px = np.sqrt((x2 - x)**2 + (y2 - y)**2)
