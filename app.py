@@ -69,11 +69,11 @@ if uploaded_file is not None:
         peaks2, _, _, smoothed2 = analyze_frequency(intensity2_filtered, fps, distance=distance_val, prominence=prom_param)
         distance_px = np.sqrt((x2 - x)**2 + (y2 - y)**2)
         speed, wavelength, distance_um = calculate_wave_properties(peaks, peaks2, fps, distance_px, pixel_size, period)
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Frequency", f"{freq:.3f} Hz")
-        col2.metric("Period", f"{period:.3f} s")
-        col3.metric("Speed", f"{speed:.2f} um/s")
-        col4.metric("Wavelength", f"{wavelength:.2f} um")
+        col1, col2 = st.columns(4)
+        #col1.metric("Frequency", f"{freq:.3f} Hz")
+        #col2.metric("Period", f"{period:.3f} s")
+        col1.metric("Speed", f"{speed:.2f} um/s")
+        col2.metric("Wavelength", f"{wavelength:.2f} um")
 
 st.success("Success")
 
