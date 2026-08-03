@@ -40,6 +40,7 @@ if uploaded_file is not None:
     if ret:
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         cv2.rectangle(frame_rgb, (x, y), (x + w, y + h), (0, 255, 0), 2) 
+        cv2.rectangle(frame_rgb, (x2, y2), (x2 + w, y2 + h), (0, 0, 255), 2)
         st.image(frame_rgb, caption=f"Preview of the calculating zone (green zone) - Frame {frame_idx}/{total_frames} - Picture size: {video_shape}") #dispay the image 'frame'
 
         intensity, fps = extract_signal(temp_video_path, x, y, w, h)
@@ -64,7 +65,6 @@ if uploaded_file is not None:
         fig.update_layout(title="Hydrogel pulse signal",xaxis_title="Time (s)", yaxis_title="Mean intensity", hovermode="x unified")
         st.plotly_chart(fig, use_container_width=True) #displays the plot
 
-        cv2.rectangle(frame_rgb, (x2, y2), (x2 + w, y2 + h), (0, 0, 255), 2)
         intensity2, _ = extract_signal(temp_video_path, x2, y2, w, h)
         intensity2_filtered = intensity2[mask]
         peaks2, _, _, smoothed2 = analyze_frequency(intensity2_filtered, fps, distance=distance_val, prominence=prom_param)
