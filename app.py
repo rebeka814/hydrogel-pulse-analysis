@@ -2,6 +2,7 @@ import streamlit as st
 import tempfile
 import cv2
 import plotly.graph_objects as go
+import numpy as np
 from src.processing import extract_signal 
 from src.signal_analysis import get_time_axis, analyze_frequency, calculate_wave_properties
 
@@ -67,7 +68,7 @@ if uploaded_file is not None:
         intensity2_filtered = intensity2[mask]
         peaks2, _, _, smoothed2 = analyze_frequency(intensity2_filtered, fps, distance=distance_val, prominence=prom_param)
         distance_px = np.sqrt((x2 - x)**2 + (y2 - y)**2)
-        speed, wavelength, distance_um = calculate_wave_properties(peaks, peaks2, fps, distance_px, pixel_size_um, period)
+        speed, wavelength, distance_um = calculate_wave_properties(peaks, peaks2, fps, distance_px, pixel_size, period)
         col1, col2, col3, col4 = st.columns(4)
         col1.metric("Frequency", f"{freq:.3f} Hz")
         col2.metric("Period", f"{period:.3f} s")
